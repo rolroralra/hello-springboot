@@ -1,0 +1,22 @@
+logging:
+  level:
+    root: INFO
+    com.samsungsds.e2e.stock: DEBUG
+
+spring:
+  application:
+    name: stocks-service
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/h2/DT;AUTO_SERVER=TRUE
+    username: dtuser
+    password:
+  h2:
+    console:
+      enabled: true         # 관리콘솔 사용
+      path: /h2console          # http://localhost:9012/h2console 로 접속하여 관리 콘솔 사용 가능 (default: /h2-console)
+  jpa:
+    database: H2
+    generate-ddl: true          # schema.sql 파일을 사용하여 Table을 생성하도록 설정
+    hibernate:
+      ddl-auto: update
