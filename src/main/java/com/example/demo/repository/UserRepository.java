@@ -28,7 +28,7 @@ public class UserRepository {
 
     public Map<String, String> getMessageMap() {
         Map<String, String> map = new HashMap<>();
-        map.put("greet", "Hello SpringBoot~");
+        map.put("result", "Hello SpringBoot!");
         return map;
     }
 
