@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.TokenRequired;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@Slf4j
 public class UserController {
 
     private UserService userService;
@@ -20,6 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @TokenRequired
     @GetMapping(path = "")
     public List<User> getAllUsers() {
         return this.userService.getAllUsers();

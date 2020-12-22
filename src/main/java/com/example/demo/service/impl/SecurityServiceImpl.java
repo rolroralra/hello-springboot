@@ -2,11 +2,13 @@ package com.example.demo.service.impl;
 
 import com.example.demo.service.SecurityService;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -17,9 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class SecurityServiceImpl implements SecurityService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
     private static String secretKey;
 
@@ -42,7 +43,7 @@ public class SecurityServiceImpl implements SecurityService {
             throw new RuntimeException("Expiry time must be greater than Zero :[" + ttlMillis + "]");
         }
 
-        LOGGER.info("secretKey: {}", secretKey);
+        log.info("secretKey: {}", secretKey);
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
@@ -69,6 +70,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public Map<String, Object> parseToken(String token) {
         Map<String, Object> map = new LinkedHashMap<>();
+
         Jws<Claims> jws;
         try {
             jws = Jwts.parser()
@@ -79,9 +81,28 @@ public class SecurityServiceImpl implements SecurityService {
             map.put("body", jws.getBody());
             map.put("signature", jws.getSignature());
         } catch(ExpiredJwtException e) {
-            LOGGER.error(e.getMessage());
+            log.error(e.getMessage());
         }
 
         return map;
+    }
+
+    @Override
+    public boolean validateToken(String token) {
+        try {
+            Jws<Claims> jws = Jwts.parser()
+                    .setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
+                    .parseClaimsJws(token);
+            log.info("{}", jws);
+            return true;
+        } catch (Throwable e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public String getSecretKey() {
+        return secretKey;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import javax.crypto.SecretKey;
 import java.util.Map;
 
 public interface SecurityService {
@@ -8,4 +9,9 @@ public interface SecurityService {
     String getSubject(String token);
 
     Map<String, Object> parseToken(String token);
+
+    boolean validateToken(String token);
+
+    String getSecretKey();
+
 }

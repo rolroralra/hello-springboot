@@ -3,14 +3,15 @@ package com.example.demo.service.impl;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service(value = "UserService")
+@Slf4j
 public class UserServiceImpl implements UserService {
-
 
     private UserRepository userRepository;
 
@@ -19,8 +20,6 @@ public class UserServiceImpl implements UserService {
                     UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-
 
     @Override
     public List<User> getAllUsers() {
