@@ -1,5 +1,22 @@
 server:
   port: 80
+logging:
+  level:
+    root: INFO
+    org.springframework: ERROR
+    com.example.demo: INFO
+  file:
+    path: log/spring-boot.log
+  logback:
+    rollingpolicy:
+      max-file-size: "10MB"
+      max-history: 10
+      file-name-pattern: "${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz"
+      clean-history-on-start: true
+#  pattern:
+#    console: "%d{yyyy-MM-dd hh-mm-ss.SSS} %-5level [%thread]  %logger[%method:%line] - %msg%n"
+#    file: "%d{yyyy-MM-dd hh-mm-ss.SSS} %-5level [%thread]  %logger[%method:%line] - %msg%n"
+
 ---
 server:
   port: 8080
