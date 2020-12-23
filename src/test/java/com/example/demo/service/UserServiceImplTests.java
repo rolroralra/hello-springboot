@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -19,13 +20,13 @@ public class UserServiceImplTests {
     private UserService userService;
 
     @Test
-    public void testAllUsers() {
+    public void testAllUsers() throws SQLException {
         List<User> users = userService.getAllUsers();
         assertEquals(4, users.size());
     }
 
     @Test
-    public void testSingleUser() {
+    public void testSingleUser() throws SQLException {
         User user = userService.getUserByUserId(1001);
         assertTrue(user.getUserName().contains("rolroralra"));
     }

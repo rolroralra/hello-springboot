@@ -1,33 +1,35 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.impl.MockUserRepositoryImpl;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service(value = "UserService")
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private MockUserRepositoryImpl userRepository;
+    private UserRepository userRepository;
 
     public UserServiceImpl(
-            @Qualifier(value = "MockUserRepository")
-                    MockUserRepositoryImpl userRepository) {
+            @Qualifier(value = "JDBCUserRepository")
+                    UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         return userRepository.getAllUsers();
     }
 
     @Override
-    public User getUserByUserId(int userId) {
+    public User getUserByUserId(int userId) throws SQLException {
         return userRepository.getUserByUserId(userId);
     }
 
@@ -37,12 +39,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void modifyUser(int userId, User user) {
+    public void modifyUser(int userId, User user) throws SQLException {
         userRepository.updateUser(userId, user);
     }
 
     @Override
-    public void removeUser(int userId) {
+    public void removeUser(int userId) throws SQLException {
         userRepository.deleteUser(userId);
     }
 }

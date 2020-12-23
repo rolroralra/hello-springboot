@@ -137,8 +137,12 @@ public class JDBCUserRepository implements UserRepository {
             pstm = conn.prepareStatement("INSERT INTO SPRING_USER VALUES(?, ?)");
             pstm.setInt(1, user.getUserId());
             pstm.setString(2, user.getUserName());
-            pstm.execute();
-            conn.commit();
+            if (pstm.executeUpdate() > 0) {
+                conn.commit();
+            }
+            else {
+                throw new SQLException("Insert Failed");
+            }
         } catch (SQLException e) {
             log.error(e.getMessage());
             rollback(conn);
@@ -163,8 +167,12 @@ public class JDBCUserRepository implements UserRepository {
             pstm = conn.prepareStatement("UPDATE SPRING_USER SET USER_NAME = ? WHERE USER_ID = ?");
             pstm.setString(1, user.getUserName());
             pstm.setInt(2, user.getUserId());
-            pstm.execute();
-            conn.commit();
+            if (pstm.executeUpdate() > 0) {
+                conn.commit();
+            }
+            else {
+                throw new SQLException("Update Failed");
+            }
         } catch (SQLException e) {
             log.error(e.getMessage());
             rollback(conn);
@@ -187,8 +195,12 @@ public class JDBCUserRepository implements UserRepository {
 
             pstm = conn.prepareStatement("DELETE FROM SPRING_USER WHERE USER_ID = ?");
             pstm.setInt(1, userId);
-            pstm.execute();
-            conn.commit();
+            if (pstm.executeUpdate() > 0) {
+                conn.commit();
+            }
+            else {
+                throw new SQLException("Delete Failed");
+            }
         } catch (SQLException e) {
             log.error(e.getMessage());
             rollback(conn);
