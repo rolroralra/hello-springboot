@@ -17,6 +17,15 @@ logging:
 #    console: "%d{yyyy-MM-dd hh-mm-ss.SSS} %-5level [%thread]  %logger[%method:%line] - %msg%n"
 #    file: "%d{yyyy-MM-dd hh-mm-ss.SSS} %-5level [%thread]  %logger[%method:%line] - %msg%n"
 
+spring:
+  application:
+    name: SpringBootJdbc
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver                                 # "com.mysql.jdbc.Driver" is deprecated.
+    url: jdbc:mysql://192.168.219.196/mysql?autoReconnect=true&userSSL=false    # jdbc:mysql://localhost/{database_name}?autoReconnect=true&userSSL=false
+    username: root
+    password: root
+
 ---
 server:
   port: 8080

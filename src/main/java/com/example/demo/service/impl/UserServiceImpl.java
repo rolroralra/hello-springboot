@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.impl.MockUserRepositoryImpl;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,11 +13,11 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+    private MockUserRepositoryImpl userRepository;
 
     public UserServiceImpl(
-            @Qualifier(value = "UserRepository2")
-                    UserRepository userRepository) {
+            @Qualifier(value = "MockUserRepository")
+                    MockUserRepositoryImpl userRepository) {
         this.userRepository = userRepository;
     }
 
