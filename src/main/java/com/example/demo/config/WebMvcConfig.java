@@ -27,4 +27,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(measuringInterceptor)
                 .addPathPatterns("/**");
     }
+
 }

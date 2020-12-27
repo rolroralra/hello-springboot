@@ -23,7 +23,7 @@ public class SwaggerConfig {
                 .forCodeGeneration(true)
                 .host("127.0.0.1:8080")
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.example.demo.controller"))
                 .paths(PathSelectors.ant("/**"))
                 .build();
     }

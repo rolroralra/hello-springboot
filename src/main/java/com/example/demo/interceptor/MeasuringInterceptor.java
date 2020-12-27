@@ -1,6 +1,7 @@
 package com.example.demo.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
@@ -21,6 +22,7 @@ public class MeasuringInterceptor implements AsyncHandlerInterceptor {
         log.info("Request : {} {} {}", request.getMethod(), request.getRequestURI(), request.getProtocol());
 
         request.setAttribute(REQUEST_TIMESTAMP_KEY, System.nanoTime());
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:8080");
 
         return true;
     }
