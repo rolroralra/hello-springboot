@@ -26,6 +26,8 @@ spring:
     username: root
     password: root
 
+security:
+  token-expiration-minute: 10
 ---
 server:
   port: 8080

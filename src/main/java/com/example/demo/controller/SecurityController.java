@@ -32,7 +32,7 @@ public class SecurityController {
     @TokenGenerated
     @GetMapping(path = "/generate/token")
     public Map<String, Object> generateToken(@RequestParam String subject, HttpServletResponse httpServletResponse) {
-        String token = securityService.createToken(subject, (2 * 1000 * 60));
+        String token = securityService.createToken(subject);
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("result", token);
 

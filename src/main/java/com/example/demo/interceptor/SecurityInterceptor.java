@@ -1,46 +1,37 @@
-package com.example.demo.aspect;
+package com.example.demo.interceptor;
 
-import ch.qos.logback.core.LogbackException;
-import com.example.demo.annotation.TokenRequired;
 import com.example.demo.service.SecurityService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.lang.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
 
-@Aspect
 @Component
 @Slf4j
-public class SecurityAspect {
+public class SecurityInterceptor implements AsyncHandlerInterceptor {
+
     SecurityService securityService;
 
     @Autowired
-    public SecurityAspect(SecurityService securityService) {
+    public SecurityInterceptor(SecurityService securityService) {
         this.securityService = securityService;
     }
 
-    @Before(value = "@annotation(tokenRequired)")
-    public void tokenRequiredWithAnnotation(TokenRequired tokenRequired) {
-        log.info("Before {}", tokenRequired);
-
-
-        // RequestContextHolder : By using ThreadLocal<T>, provide ServletRequestAttributes
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // Check for JWT Token in request header
 //        String tokenInHeader = request.getHeader("token");
-        if (request.getCookies() == null || request.getCookies().length == 0) {
+
+        if (Objects.isEmpty(request.getCookies())) {
             throw new IllegalArgumentException("Empty Cookie");
         }
 
@@ -65,6 +56,7 @@ public class SecurityAspect {
         if (claims == null || claims.getSubject() == null) {
             throw new IllegalArgumentException("Token Error : Claim is null");
         }
-    }
 
+        return true;
+    }
 }
