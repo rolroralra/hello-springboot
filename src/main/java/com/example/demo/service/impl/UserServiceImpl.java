@@ -5,6 +5,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.impl.MockUserRepositoryImpl;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     public UserServiceImpl(
-            @Qualifier(value = "JDBCUserRepository")
+//            @Qualifier(value = "MockUserRepository")
+//            @Qualifier(value = "JdbcUserRepository")
+//            @Qualifier(value = "JdbcTemplateUserRepository")
+            @Qualifier(value = "NamedParameterJdbcTemplateUserRepository")
                     UserRepository userRepository) {
         this.userRepository = userRepository;
     }

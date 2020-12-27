@@ -17,13 +17,14 @@ import java.util.List;
 import static com.example.demo.repository.Tables.USER_TABLE;
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
-@Repository(value = "JDBCUserRepository")
+// JDBC
+@Repository(value = "JdbcUserRepository")
 @Slf4j
-public class JDBCUserRepository implements UserRepository {
+public class JdbcUserRepository implements UserRepository {
     private DataSource dataSource;
 
     @Autowired
-    public JDBCUserRepository(DataSource dataSource) {
+    public JdbcUserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -134,7 +135,7 @@ public class JDBCUserRepository implements UserRepository {
             conn.setTransactionIsolation(TRANSACTION_SERIALIZABLE);
             conn.setAutoCommit(false);
 
-            pstm = conn.prepareStatement("INSERT INTO SPRING_USER VALUES(?, ?)");
+            pstm = conn.prepareStatement("INSERT INTO SPRING_USER(USER_ID, USER_NAME) VALUES(?, ?)");
             pstm.setInt(1, user.getUserId());
             pstm.setString(2, user.getUserName());
             if (pstm.executeUpdate() > 0) {
