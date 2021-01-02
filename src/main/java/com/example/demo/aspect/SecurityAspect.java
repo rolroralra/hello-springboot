@@ -30,7 +30,7 @@ public class SecurityAspect {
     }
 
     @Before(value = "@annotation(tokenRequired)")
-    public void tokenRequiredWithAnnotation(TokenRequired tokenRequired) {
+    public void tokenRequiredWithAnnotation(TokenRequired tokenRequired) throws Exception {
         log.info("Before {}", tokenRequired);
 
 
@@ -48,7 +48,7 @@ public class SecurityAspect {
         String token = Arrays.stream(request.getCookies())
                 .filter(c -> c.getName().equalsIgnoreCase("token"))
                 .findFirst()
-                .orElseThrow()
+                .orElseThrow(Exception::new)
                 .getValue();
 
         if (Strings.isEmpty(token)) {

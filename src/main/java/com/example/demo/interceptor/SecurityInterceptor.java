@@ -27,7 +27,7 @@ public class SecurityInterceptor implements AsyncHandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Check for JWT Token in request header
 //        String tokenInHeader = request.getHeader("token");
 
@@ -39,7 +39,7 @@ public class SecurityInterceptor implements AsyncHandlerInterceptor {
         String token = Arrays.stream(request.getCookies())
                 .filter(c -> c.getName().equalsIgnoreCase("token"))
                 .findFirst()
-                .orElseThrow()
+                .orElseThrow(Exception::new)
                 .getValue();
 
         if (Strings.isEmpty(token)) {

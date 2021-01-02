@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8080
 logging:
   level:
     root: INFO
@@ -29,16 +29,17 @@ spring:
 security:
   token-expiration-minute: 10
 ---
-server:
-  port: 8080
 spring:
   config:
     activate:
       on-profile: local
----
 server:
-  port: 80
+  port: 8080
+---
 spring:
   config:
     activate:
       on-profile: dev
+server:
+  port: 80
+

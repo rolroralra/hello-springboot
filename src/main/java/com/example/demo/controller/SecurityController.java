@@ -49,11 +49,11 @@ public class SecurityController {
 
     @TokenRequired
     @GetMapping(path = {"/get/subject"})
-    public Map<String, Object> getSubject(HttpServletRequest httpServletRequest/*@RequestParam String token*/) {
+    public Map<String, Object> getSubject(HttpServletRequest httpServletRequest/*@RequestParam String token*/) throws Exception {
         String token = Arrays.stream(httpServletRequest.getCookies())
                 .filter(c -> c.getName().equalsIgnoreCase("token"))
                 .findFirst()
-                .orElseThrow()
+                .orElseThrow(Exception::new)
                 .getValue();
 
         log.info("token : {}", token);
@@ -67,12 +67,12 @@ public class SecurityController {
 
     @TokenRequired
     @GetMapping(path = {"/parse/token"})
-    public Map<String, Object> parseToken(/*@RequestParam String token,*/ HttpServletRequest httpServletRequest) {
+    public Map<String, Object> parseToken(/*@RequestParam String token,*/ HttpServletRequest httpServletRequest) throws Exception {
         Map<String, Object> map = new LinkedHashMap<>();
         String token = Arrays.stream(httpServletRequest.getCookies())
                 .filter(c -> c.getName().equalsIgnoreCase("token"))
                 .findFirst()
-                .orElseThrow()
+                .orElseThrow(Exception::new)
                 .getValue();
 
         log.info("token : {}", token);
