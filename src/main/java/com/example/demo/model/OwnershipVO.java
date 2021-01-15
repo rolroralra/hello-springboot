@@ -1,16 +1,19 @@
 package com.example.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//@Builder
 public class OwnershipVO {
     private String ownershipId;
     private String permission;
+
+    public OwnershipVO(String ownershipId, Permission permission) {
+        this.ownershipId = ownershipId;
+        this.permission = permission.getValue();
+    }
 
     public OwnershipVO(OwnershipVO.Builder builder) {
         this(builder.ownershipId, builder.permission);
@@ -43,6 +46,7 @@ public class OwnershipVO {
             this.permission = val.getValue();
             return this;
         }
+
         public Builder permission(String val) {
             this.permission = val;
             return this;
@@ -56,12 +60,4 @@ public class OwnershipVO {
     public static Builder builder() {
         return new Builder();
     }
-
-    public OwnershipVO(String ownershipId, Permission permission) {
-        this.ownershipId = ownershipId;
-        this.permission = permission.getValue();
-    }
-
-
-
 }
