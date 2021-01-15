@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,13 +11,17 @@ import java.time.Duration;
 
 @Configuration
 public class RestTemplateConfig {
+    @Value("${rest-template.timeout.connection}")
+    private Long connectionTimeout;
+    @Value("${rest-template.timeout.read}")
+    private Long readTimeout;
 
     // Using RestTemplateBuilder
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
-                .setConnectTimeout(Duration.ofMillis(3000))
-                .setReadTimeout(Duration.ofMillis(3000))
+                .setConnectTimeout(Duration.ofMillis(connectionTimeout))
+                .setReadTimeout(Duration.ofMillis(readTimeout))
                 .build();
     }
 

@@ -28,6 +28,10 @@ spring:
 
 security:
   token-expiration-minute: 10
+rest-template:
+  timeout:
+    connection: 3000
+    read: 3000
 ---
 spring:
   config:

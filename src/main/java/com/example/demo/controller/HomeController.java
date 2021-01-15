@@ -16,7 +16,7 @@ import java.util.*;
 @Slf4j
 public class HomeController {
 
-    private HomeService homeService;
+    private final HomeService homeService;
 
     @Autowired
     public HomeController(HomeService homeService) {
@@ -30,11 +30,14 @@ public class HomeController {
 
     @GetMapping("/test")
     public DataVO test() {
-        return new DataVO(
-                "id",
-                new OwnershipVO("rolroralra", OwnershipVO.Permission.CREATE),
-                System.currentTimeMillis()
-        );
+        return DataVO.builder()
+                .dataId("dataId")
+                .ownership(OwnershipVO.builder()
+                        .ownershipId("rolroralra")
+                        .permission(OwnershipVO.Permission.CREATE)
+                        .build())
+                .time(System.currentTimeMillis())
+                .build();
     }
 
 
