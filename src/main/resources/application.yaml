@@ -3,7 +3,7 @@ server:
 logging:
   level:
     root: INFO
-    org.springframework: ERROR
+    org.springframework: INFO
     com.example.demo: INFO
   file:
     path: log/spring-boot.log
