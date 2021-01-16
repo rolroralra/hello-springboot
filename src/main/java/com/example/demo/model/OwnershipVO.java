@@ -10,7 +10,7 @@ public class OwnershipVO {
     private String ownershipId;
     private String permission;
 
-    public OwnershipVO(String ownershipId, Permission permission) {
+    public OwnershipVO(String ownershipId, OwnershipVO.Permission permission) {
         this.ownershipId = ownershipId;
         this.permission = permission.getValue();
     }
