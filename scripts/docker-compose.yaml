@@ -1,0 +1,25 @@
+version: '3.4'
+
+networks:
+  basic:
+
+services:
+  mysql:
+    image: mysql:${MYSQL_IMAGE_TAG}
+    environment:
+    - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+    ports:
+    - "${MYSQL_EXPOSE_PORT}:3306"
+    volumes:
+    - "./mysql:/var/lib/mysql"
+    command:
+    - "--character-set-server=utf8mb4"
+    - "--collation-server=utf8mb4_unicode_ci"
+    - "--default-authentication-plugin=mysql_native_password"
+
+  springboot:
+    image: rolroralra/springboot:0.0.1
+    ports:
+    - 8080:8080
+    depends_on:
+    - mysql
