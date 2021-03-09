@@ -8,12 +8,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,14 +19,18 @@ import java.nio.charset.StandardCharsets;
 public class CertificateController {
     private CertificateUtil certificateUtil;
 
-    public CertificateController(@Qualifier("CertificateUtil") CertificateUtil certificateUtil) throws Exception {
+    public CertificateController(@Qualifier("CertificateUtil") CertificateUtil certificateUtil) {
         this.certificateUtil = certificateUtil;
     }
 
-    @PostMapping(produces = {"application/json"})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getCertificate(
-            @RequestParam String host, @RequestParam int port
-    ) throws Exception {
+            @RequestBody Map<String, Object> requestBodyMap
+            ) throws Exception {
+
+        String host = (String) requestBodyMap.get("host");
+        int port = (Integer) (requestBodyMap.get("port"));
+
         String certificate = certificateUtil.getCertificate(host, port);
 
         return ResponseEntity.ok()
@@ -36,10 +38,41 @@ public class CertificateController {
                 .body(certificate);
     }
 
-    @PostMapping()
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> getCertificate(
+            @RequestParam String host, @RequestParam int port
+    ) throws Exception {
+
+        String certificate = certificateUtil.getCertificate(host, port);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(certificate);
+    }
+
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<Resource> downloadCertificate(
+            @RequestBody Map<String, Object> requestBodyMap
+    ) throws Exception {
+
+        String host = (String) requestBodyMap.get("host");
+        int port = (Integer) (requestBodyMap.get("port"));
+
+        String certificate = certificateUtil.getCertificate(host, port);
+
+        ByteArrayResource resource = new ByteArrayResource(certificate.getBytes(StandardCharsets.UTF_8));
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + host + ".crt" + "\"")
+                .body(resource);
+    }
+
+    @PostMapping(produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Resource> downloadCertificate(
             @RequestParam String host, @RequestParam int port
     ) throws Exception {
+
         String certificate = certificateUtil.getCertificate(host, port);
         ByteArrayResource resource = new ByteArrayResource(certificate.getBytes(StandardCharsets.UTF_8));
 

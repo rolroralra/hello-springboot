@@ -52,16 +52,12 @@ public class CertificateUtil {
             X509Certificate certificate = chain[0];
 
             BASE64Encoder encoder = new BASE64Encoder();
-            String certificateString = new StringBuilder()
-                    .append(X509Factory.BEGIN_CERT)
-                    .append("\n")
-                    .append(encoder.encode(certificate.getEncoded()))
-                    .append("\n")
-                    .append(X509Factory.END_CERT)
-                    .append("\n")
-                    .toString();
 
-            return certificateString;
+            return X509Factory.BEGIN_CERT +
+                    "\n" +
+                    encoder.encode(certificate.getEncoded()) +
+                    X509Factory.END_CERT +
+                    "\n";
 
         } catch (Exception e) {
             throw e;
