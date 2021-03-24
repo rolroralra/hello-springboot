@@ -38,7 +38,7 @@ public class CertificateController {
                 .body(certificate);
     }
 
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getCertificate(
             @RequestParam String host, @RequestParam int port
     ) throws Exception {
