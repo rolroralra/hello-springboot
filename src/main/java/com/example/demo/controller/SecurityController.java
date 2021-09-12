@@ -31,14 +31,14 @@ public class SecurityController {
 
     @TokenGenerated
     @GetMapping(path = "/generate/token")
-    public Map<String, Object> generateToken(@RequestParam String subject, HttpServletResponse httpServletResponse) {
+    public Map<String, Object> generateToken(@RequestParam String subject, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String token = securityService.createToken(subject);
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("result", token);
 
 
         Cookie cookie = new Cookie("token", token);
-        cookie.setDomain("localhost");
+        cookie.setDomain(httpServletRequest.getServerName());
         cookie.setMaxAge(20 * 1000 * 60);
         cookie.setPath("/");
 
