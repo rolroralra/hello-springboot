@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>springboot</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
-	<name>demo</name>
+	<name>springboot</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -121,7 +121,21 @@
 			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.15</version>
+		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>docker.io</id>
+			<url>https://index.docker.io/v1/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
@@ -145,6 +159,35 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.10</version>
+				<configuration>
+					<repository>rolroralra/${project.artifactId}</repository>
+					<tag>latest</tag>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+					<contextDirectory>${project.build.directory}/docker</contextDirectory>
+					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+				</configuration>
+				<executions>
+					<execution>
+						<id>build</id>
+						<goals>
+							<goal>build</goal>
+							<goal>tag</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>push</id>
+						<goals>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

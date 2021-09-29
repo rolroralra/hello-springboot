@@ -1,10 +1,12 @@
 FROM openjdk:8-jdk-alpine as builder
 MAINTAINER rolroralra <rolroralra@naver.com>
 
-ARG MAVEN_TARGET=target
+#ARG MAVEN_TARGET=target
 
-COPY ${MAVEN_TARGET}/*.jar ./
-RUN jar -xf *.jar
+#COPY ${MAVEN_TARGET}/*.jar ./
+ARG JAR_FILE
+COPY ${JAR_FILE} ./
+RUN jar -xf ${JAR_FILE}
 
 
 FROM openjdk:8-jdk-alpine
@@ -22,6 +24,8 @@ USER ${SPRING_USER}:${SPRING_USER}
 COPY --from=builder BOOT-INF/lib /app/lib
 COPY --from=builder META-INF /app/META-INF
 COPY --from=builder BOOT-INF/classes /app
+
+EXPOSE 8080
 
 #ENTRYPOINT ["java","-cp","app:app/lib/*", "${PACKAGE_NAME}.${APPLICATION_NAME}"]
 ENTRYPOINT java -cp app:app/lib/* ${PACKAGE_NAME}.${APPLICATION_NAME}
