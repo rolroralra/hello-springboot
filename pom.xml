@@ -121,13 +121,6 @@
 			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.15</version>
-		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -152,6 +145,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -160,6 +154,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
@@ -170,24 +165,10 @@
 					<buildArgs>
 						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
 					</buildArgs>
-					<contextDirectory>${project.build.directory}/docker</contextDirectory>
+					<contextDirectory>${project.basedir}</contextDirectory>
+					<dockerfile>${project.basedir}/docker/Dockerfile</dockerfile>
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 				</configuration>
-				<executions>
-					<execution>
-						<id>build</id>
-						<goals>
-							<goal>build</goal>
-							<goal>tag</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>push</id>
-						<goals>
-							<goal>push</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,11 +1,9 @@
 FROM openjdk:8-jdk-alpine as builder
 MAINTAINER rolroralra <rolroralra@naver.com>
 
-#ARG MAVEN_TARGET=target
-
-#COPY ${MAVEN_TARGET}/*.jar ./
 ARG JAR_FILE
-COPY ${JAR_FILE} ./
+
+COPY target/${JAR_FILE} ./
 RUN jar -xf ${JAR_FILE}
 
 

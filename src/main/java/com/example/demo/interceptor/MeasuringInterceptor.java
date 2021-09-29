@@ -30,15 +30,15 @@ public class MeasuringInterceptor implements AsyncHandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)  {
         log.info("Interceptor > postHandle");
-        log.info("response: {} {}", response.getStatus(), HttpStatus.valueOf(response.getStatus()).getReasonPhrase());
+        log.info("Response: {} {}", response.getStatus(), HttpStatus.valueOf(response.getStatus()).getReasonPhrase());
         log.info("modelAndView: {}", modelAndView);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.info("Interceptor > afterCompletion");
-        log.info("response: {} {}", response.getStatus(), HttpStatus.valueOf(response.getStatus()).getReasonPhrase());
-        log.info("exception: {}", ex);
+        log.info("Response: {} {} {}", request.getProtocol() ,response.getStatus(), HttpStatus.valueOf(response.getStatus()).getReasonPhrase());
+        log.info("exception: ", ex);
 
         long startNanoTime = (long) request.getAttribute(REQUEST_TIMESTAMP_KEY);
         log.info("spent time : {} ms", (System.nanoTime() - startNanoTime) / 1000 / 1000);

@@ -23,7 +23,7 @@ public class CertificateController {
         this.certificateUtil = certificateUtil;
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> getCertificate(
             @RequestBody Map<String, Object> requestBodyMap
             ) throws Exception {
@@ -38,7 +38,7 @@ public class CertificateController {
                 .body(certificate);
     }
 
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> getCertificate(
             @RequestParam String host, @RequestParam(required = false, defaultValue = "443") int port
     ) throws Exception {
@@ -46,7 +46,7 @@ public class CertificateController {
         String certificate = certificateUtil.getCertificate(host, port);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.TEXT_PLAIN)
                 .body(certificate);
     }
 
@@ -58,7 +58,7 @@ public class CertificateController {
         Resource certificateResource = createCertificateResource(host, port);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + host + ".crt" + "\"")
                 .body(certificateResource);
     }
@@ -74,7 +74,7 @@ public class CertificateController {
         Resource certificateResource = createCertificateResource(host, port);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + host + ".crt" + "\"")
                 .body(certificateResource);
     }
