@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 public class SecurityController {
 
-    private SecurityService securityService;
+    private final SecurityService securityService;
 
     @Autowired
     public SecurityController(SecurityService securityService) {

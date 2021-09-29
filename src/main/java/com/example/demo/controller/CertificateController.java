@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/certificate")
 public class CertificateController {
-    private CertificateUtil certificateUtil;
+    private final CertificateUtil certificateUtil;
 
     public CertificateController(@Qualifier("CertificateUtil") CertificateUtil certificateUtil) {
         this.certificateUtil = certificateUtil;
@@ -29,7 +29,7 @@ public class CertificateController {
             ) throws Exception {
 
         String host = (String) requestBodyMap.get("host");
-        int port = (Integer) (requestBodyMap.get("port"));
+        int port = (Integer) (requestBodyMap.getOrDefault("port", 443));
 
         String certificate = certificateUtil.getCertificate(host, port);
 
@@ -40,7 +40,7 @@ public class CertificateController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getCertificate(
-            @RequestParam String host, @RequestParam int port
+            @RequestParam String host, @RequestParam(required = false, defaultValue = "443") int port
     ) throws Exception {
 
         String certificate = certificateUtil.getCertificate(host, port);
@@ -50,36 +50,38 @@ public class CertificateController {
                 .body(certificate);
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    @RequestMapping(path = "/download", method = {RequestMethod.GET, RequestMethod.POST}, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<Resource> downloadCertificate(
+            @RequestParam String host, @RequestParam(required = false, defaultValue = "443") int port
+    ) throws Exception {
+
+        Resource certificateResource = createCertificateResource(host, port);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + host + ".crt" + "\"")
+                .body(certificateResource);
+    }
+
+    @PostMapping(path = "/download", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Resource> downloadCertificate(
             @RequestBody Map<String, Object> requestBodyMap
     ) throws Exception {
 
         String host = (String) requestBodyMap.get("host");
-        int port = (Integer) (requestBodyMap.get("port"));
+        int port = (Integer) (requestBodyMap.getOrDefault("port", 443));
 
-        String certificate = certificateUtil.getCertificate(host, port);
-
-        ByteArrayResource resource = new ByteArrayResource(certificate.getBytes(StandardCharsets.UTF_8));
+        Resource certificateResource = createCertificateResource(host, port);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + host + ".crt" + "\"")
-                .body(resource);
+                .body(certificateResource);
     }
 
-    @PostMapping(produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<Resource> downloadCertificate(
-            @RequestParam String host, @RequestParam int port
-    ) throws Exception {
-
+    private Resource createCertificateResource(String host, int port) throws Exception {
         String certificate = certificateUtil.getCertificate(host, port);
-        ByteArrayResource resource = new ByteArrayResource(certificate.getBytes(StandardCharsets.UTF_8));
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + host + ".crt" + "\"")
-                .body(resource);
+        return new ByteArrayResource(certificate.getBytes(StandardCharsets.UTF_8));
     }
-
 }
