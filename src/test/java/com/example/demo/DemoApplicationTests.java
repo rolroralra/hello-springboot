@@ -15,24 +15,4 @@ class DemoApplicationTests {
 				.forEach(System.out::println);
 	}
 
-//	@Test
-//	void contextLoads() throws JSONException, IOException {
-//		OkHttpClient client = new OkHttpClient();
-//		Request request = new Request.Builder()
-//				.url("https://nexledger.samsungsds.com:1443/testnet/authentication")
-//				.addHeader("Content-Type", "application/json")
-//				.post(RequestBody.create(
-//						new JSONObject()
-//								.put("username","shyoung.kim@samsung.com")
-//								.put("password", "password")
-//								.toString(),
-//						MediaType.parse("application/json"))
-//				)
-//				.build();
-//
-//		Response response = client.newCall(request).execute();
-//		System.out.println(response.toString());
-//		System.out.println(response.header("Set-Cookie"));
-//	}
-
 }
